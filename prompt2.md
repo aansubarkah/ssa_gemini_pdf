@@ -204,13 +204,21 @@ Setelah menyimpan, mintalah Gemini menampilkan:
 | Ada baris yang kosong di tengah Excel                          | Baris kosong dari tabel ikut tersimpan                                 | "Hapus baris yang seluruhnya kosong"                                         |
 | Anggota keluarga tidak muncul                                  | Tabel tidak terdeteksi                                                 | "Cari tabel yang dimulai dengan kolom No., Nama, Pekerjaan, Tanggal Lahir"   |
 | Kolom `nama` dan `tanggal_lahir` bertabrakan                   | Excel menolak nama kolom yang sama                                     | "Tetap pertahankan dua kolom bernama nama dan dua kolom bernama tanggal_lahir sesuai urutan yang diminta" |
+| Gemini hanya menulis penjelasan / tidak mengeluarkan file | Tombol Code Execution belum aktif, atau Gemini membaca PDF secara visual | "Nyalakan Code Execution di pengaturan obrolan, lalu jalankan kode Python dan berikan file .xlsx. Jangan ketik ulang isi PDF." |
 
 ---
 
 ## 7. PROMPT YANG DIKIRIM KE GEMINI (Salin dari sini ke chat)
 
+**PRASYARAT — wajib dicek sebelum kirim prompt:**
+1. Pastikan tombol **Code Execution** (atau "Advanced" → code execution) dalam obrolan Gemini **aktif / nyala**. Jika mati, Gemini hanya akan menulis penjelasan, bukan menjalankan kode.
+2. Jangan menulis instruksi manual "ketik ulang tabel ini" — itu membuat Gemini sekadar menyalin isi PDF sebagai teks.
+3. Lampirkan file PDF, lalu salin teks di bawah ini.
+
 ```text
-Berikut file PDF bernama Laporan_SKUMPTK_dummy.pdf. Ekstrak datanya dan kirimkan kembali sebagai file Excel bernama Laporan_SKUMPTK.xlsx.
+Gunakan CODE EXECUTION (jalankan Python). JANGAN membaca isi PDF dengan mata sendiri dan JANGAN mengetik ulang datanya sebagai teks. Anda WAJIB menulis kode Python, MENJALANKANNYA di sandbox, dan mengembalikan file .xlsx. Jika tidak menjalankan kode, jawaban Anda salah.
+
+Berikut file PDF bernama Laporan_SKUMPTK_dummy.pdf. Ekstrak datanya dengan Python dan kirimkan kembali sebagai file Excel bernama Laporan_SKUMPTK.xlsx.
 
 Setiap halaman PDF berisi satu surat keterangan untuk satu pegawai dengan tabel susunan keluarga di bawahnya.
 
@@ -242,7 +250,7 @@ Pastikan semua kolom tanggal dihasilkan sebagai tanggal Excel yang benar, bukan 
 
 Setelah selesai, tampilkan jumlah halaman yang dibaca, total baris Excel, 5 baris pertama, konfirmasi file Laporan_SKUMPTK.xlsx sudah dibuat, dan beri peringatan jika ada masalah.
 
-Langsung jalankan kodenya di sandbox, lalu lampirkan file Laporan_SKUMPTK.xlsx agar bisa saya unduh. Jangan hanya tuliskan langkah-langkah atau penjelasan.
+Jalankan kodenya di sandbox dengan CODE EXECUTION, lalu lampirkan file Laporan_SKUMPTK.xlsx agar bisa saya unduh. Jangan hanya menuliskan langkah-langkah, potongan kode, atau penjelasan — hasil akhirnya HARUS berupa file .xlsx yang bisa diunduh.
 ```
 
 ---
