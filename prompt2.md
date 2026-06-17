@@ -210,33 +210,39 @@ Setelah menyimpan, mintalah Gemini menampilkan:
 ## 7. PROMPT YANG DIKIRIM KE GEMINI (Salin dari sini ke chat)
 
 ```text
-Anda memiliki lingkungan Python dalam kotak pasir dan file bernama Laporan_SKUMPTK_dummy.pdf dilampirkan di chat ini.
+Berikut file PDF bernama Laporan_SKUMPTK_dummy.pdf. Ekstrak datanya dan kirimkan kembali sebagai file Excel bernama Laporan_SKUMPTK.xlsx.
 
-PDF ini berisi beberapa halaman. Setiap halaman adalah surat keterangan untuk satu pegawai dengan susunan keluarga.
+Setiap halaman PDF berisi satu surat keterangan untuk satu pegawai dengan tabel susunan keluarga di bawahnya.
 
-Silakan gunakan Python untuk:
-1. Menginstal alat apa pun yang dibutuhkan.
-2. Membaca setiap halaman PDF.
-3. Mengambil data pegawai dari setiap halaman berdasarkan pola berikut:
-   - Poin 1 (Nama / Nip): pisahkan berdasarkan tanda "/", bagian kiri sebagai nama pegawai, bagian kanan sebagai NIP.
-   - Poin 2 (Tempat/ Tanggal Lahir): pisahkan berdasarkan tanda "/", bagian kiri sebagai tempat lahir, bagian kanan sebagai tanggal lahir. Ubah tanggal lahir pegawai dari format DD-MM-YYYY menjadi YYYY-MM-DD dan simpan sebagai tanggal Excel.
-   - Poin 3 sebagai jenis kelamin.
-   - Poin 4 sebagai agama.
-   - Poin 5 sebagai status kepegawaian.
-   - Poin 7 (Pangkat/Golongan): teks di dalam kurung sebagai golongan, teks setelah kurung tutup sebagai pangkat.
-   - Poin 8 sebagai instansi.
-   - Poin 9 sebagai masa kerja.
-   - Poin 11 sebagai alamat.
-4. Mengambil tabel susunan keluarga di bagian bawah setiap halaman. Tabel memiliki kolom: No., Nama, Pekerjaan, Tanggal Lahir, Tanggal Perkawinan, Keterangan, dan Status.
-5. Lewati baris judul tabel dan baca setiap baris anggota keluarga.
-6. Untuk setiap baris di tabel keluarga, buat satu baris di Excel yang berisi semua data pegawai dari halaman tersebut, diikuti oleh kolom dari tabel keluarga: nama, pekerjaan, tanggal_lahir, tanggal_perkawinan, keterangan, dan status.
-7. Membuat file Excel bernama Laporan_SKUMPTK.xlsx dengan kolom-kolom ini:
-   nama, nip, tempat, tanggal_lahir, jenis_kelamin, agama, status_kepegawaian, pangkat, golongan, instansi, masa_kerja, alamat, nama, pekerjaan, tanggal_lahir, tanggal_perkawinan, keterangan, status.
-   Perhatikan: ada dua kolom bernama "nama" dan dua kolom bernama "tanggal_lahir". Pertama dari data pegawai, kedua dari tabel keluarga.
-8. Pastikan semua kolom tanggal disimpan sebagai tanggal yang dikenali Excel, bukan hanya teks biasa.
-9. Beritahu berapa halaman yang berhasil dibaca, total baris Excel, tampilkan 5 baris pertama, konfirmasi bahwa Laporan_SKUMPTK.xlsx sudah dibuat, dan beri peringatan jika ada masalah.
+Buat satu baris per anggota keluarga. Setiap baris harus berisi data pegawai dari halaman yang sama, lalu diikuti data anggota keluarga dari tabel.
 
-Terakhir, berikan file Laporan_SKUMPTK.xlsx agar saya bisa mengunduhnya.
+Kolom hasil Excel (urut dari kiri ke kanan):
+nama, nip, tempat, tanggal_lahir, jenis_kelamin, agama, status_kepegawaian, pangkat, golongan, instansi, masa_kerja, alamat, nama, pekerjaan, tanggal_lahir, tanggal_perkawinan, keterangan, status.
+
+Catatan: ada dua kolom bernama "nama" dan dua kolom bernama "tanggal_lahir". Yang pertama berasal dari data pegawai, yang kedua dari tabel keluarga.
+
+Cara membaca data pegawai dari setiap halaman:
+- Poin 1 "Nama / Nip": pisahkan dengan tanda "/". Kiri = nama, kanan = nip.
+- Poin 2 "Tempat/ Tanggal Lahir": pisahkan dengan tanda "/". Kiri = tempat, kanan = tanggal lahir. Tanggal lahir pegawai di PDF memakai format DD-MM-YYYY; ubah menjadi YYYY-MM-DD dan simpan sebagai tanggal yang dikenali Excel.
+- Poin 3 = jenis kelamin.
+- Poin 4 = agama.
+- Poin 5 = status kepegawaian.
+- Poin 7 "Pangkat/Golongan": teks di dalam kurung = golongan; teks setelah kurung tutup = pangkat.
+- Poin 8 = instansi.
+- Poin 9 = masa kerja.
+- Poin 11 = alamat.
+
+Cara membaca tabel keluarga dari setiap halaman:
+- Cari tabel dengan kolom: No., Nama, Pekerjaan, Tanggal Lahir, Tanggal Perkawinan, Keterangan, Status.
+- Lewati baris judulnya.
+- Baca setiap baris anggota keluarga.
+- Jika Tanggal Lahir atau Tanggal Perkawinan kosong, biarkan kosong.
+
+Pastikan semua kolom tanggal dihasilkan sebagai tanggal Excel yang benar, bukan teks biasa.
+
+Setelah selesai, tampilkan jumlah halaman yang dibaca, total baris Excel, 5 baris pertama, konfirmasi file Laporan_SKUMPTK.xlsx sudah dibuat, dan beri peringatan jika ada masalah.
+
+Langsung jalankan kodenya di sandbox, lalu lampirkan file Laporan_SKUMPTK.xlsx agar bisa saya unduh. Jangan hanya tuliskan langkah-langkah atau penjelasan.
 ```
 
 ---
