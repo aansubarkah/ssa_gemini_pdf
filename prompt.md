@@ -2,6 +2,7 @@
 
 > **Purpose:** Ask Gemini to write and run Python code that extracts the table from `Store.pdf` and saves it as `Store.xlsx`.
 > **Audience:** Students / non-programmers. Tweak only the sections marked **(EDITABLE)**.
+> **Important:** This version is intentionally free of Python syntax. The user does not need to understand Python; they only need to describe what they want in plain language.
 
 ---
 
@@ -38,57 +39,39 @@ BusinessEntityID | Name                    | SalesPersonID | Demographics | rowg
 
 ---
 
-## 3. INSTRUCTIONS FOR GEMINI
+## 3. INSTRUCTIONS FOR GEMINI (Plain-language steps)
 
-Generate Python code that does the following, then run it in the sandbox and provide the resulting `Store.xlsx` file for download.
+### 3.1 Setup
 
-### 3.1 Load libraries
-
-Use:
-
-```python
-import pdfplumber
-import pandas as pd
-```
-
-If these packages are not installed, install them with:
-
-```python
-!pip install pdfplumber pandas openpyxl
-```
+Gemini will use its sandboxed Python environment. Ask it to install any missing tools it needs, then write and run the script itself.
 
 ### 3.2 Read every page
 
-1. Open `Store.pdf` with `pdfplumber`.
-2. Loop through **all pages**.
-3. On each page, extract the table using `page.extract_tables()`.
+- Read the entire PDF from page 1 to page 15.
+- Identify the table on each page.
 
 ### 3.3 Clean the data
 
-1. Skip empty tables.
-2. Treat the **first non-empty row** of the first page as the header.
-3. For every other page, skip its header row.
-4. Combine all remaining rows into a single list.
-5. If any logical cell (especially `rowguid` or `Demographics`) is split across multiple cells on the same row, concatenate the pieces with no spaces unless a space is already present.
-6. Remove fully blank rows.
+- Use the first row of page 1 as the column header.
+- Skip the first row on every later page, so the header appears only once.
+- Combine all other rows into one continuous list.
+- If a piece of information (especially `rowguid` or `Demographics`) is broken into two or more cells on the same row, put it back together into one value.
+- Remove fully blank rows.
 
 ### 3.4 Create the Excel file
 
-1. Convert the combined data into a `pandas.DataFrame` using the header from step 3.3.2.
-2. Save it as `Store.xlsx` with `index=False`:
-
-```python
-df.to_excel("Store.xlsx", index=False, engine='openpyxl')
-```
+- Create an Excel workbook.
+- Put the combined table into the first sheet.
+- Save the file as `Store.xlsx`.
 
 ### 3.5 Verify and report
 
-After saving, print:
+After saving, ask Gemini to show:
 
-- The number of rows extracted (excluding the header).
-- The first 5 rows of the DataFrame.
-- A confirmation that `Store.xlsx` was created.
-- Any warnings about missing values or split cells that could not be merged cleanly.
+- How many data rows it extracted (excluding the header).
+- The first 5 rows as a preview.
+- Confirmation that `Store.xlsx` was created.
+- Any warnings about missing values or rows that looked messy.
 
 ---
 
@@ -108,7 +91,7 @@ After saving, print:
 | `rowguid` looks broken into several columns            | PDF wraps one logical cell across cells                           | "Concatenate the rowguid pieces for each row into one column"         |
 | Some rows have the wrong number of columns             | Page contains extra text lines that were mistaken for table rows  | "Only keep rows that have 6 non-empty values"                         |
 | Duplicate rows appear                                  | Same table printed on every page and headers are kept twice       | "Remove duplicate rows, and keep only one header at the top"          |
-| Excel file columns look too narrow                     | Default column widths                                             | "Auto-fit column widths in openpyxl after saving"                     |
+| Excel file columns look too narrow                     | Default column widths                                             | "Auto-fit column widths in the Excel file after saving"               |
 
 ---
 
@@ -128,15 +111,15 @@ You have a sandboxed Python environment and a file called Store.pdf attached to 
 The PDF is 15 pages long. Each page contains the same store table with these 6 columns:
 BusinessEntityID, Name, SalesPersonID, Demographics, rowguid, ModifiedDate.
 
-Please write and execute Python code that:
-1. Installs pdfplumber, pandas, and openpyxl if they are not already available.
-2. Reads every page of Store.pdf.
-3. Extracts tables from each page using pdfplumber.
-4. Uses the first page's header row as the column names.
-5. Skips the header row on all later pages.
-6. Merges any split cells on each row, especially rowguid and Demographics, so every row has exactly 6 logical values matching the header.
-7. Creates a DataFrame and saves it as Store.xlsx with openpyxl (index=False).
-8. Prints the number of data rows, the first 5 rows, a confirmation that Store.xlsx was created, and any warnings about messy rows.
+Please use Python to:
+1. Install any missing tools you need.
+2. Read every page of Store.pdf.
+3. Extract the table from each page.
+4. Use the first row of page 1 as the column header.
+5. Skip the header row on all later pages.
+6. Merge any split cells on each row, especially in rowguid and Demographics, so every row has exactly 6 values matching the header.
+7. Save the combined table as Store.xlsx.
+8. Tell me how many data rows were extracted, show the first 5 rows, confirm that Store.xlsx was created, and warn me about any messy rows.
 
 Finally, provide the Store.xlsx file so I can download it.
 ```
