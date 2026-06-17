@@ -204,7 +204,7 @@ Setelah menyimpan, mintalah Gemini menampilkan:
 | Ada baris yang kosong di tengah Excel                          | Baris kosong dari tabel ikut tersimpan                                 | "Hapus baris yang seluruhnya kosong"                                         |
 | Anggota keluarga tidak muncul                                  | Tabel tidak terdeteksi                                                 | "Cari tabel yang dimulai dengan kolom No., Nama, Pekerjaan, Tanggal Lahir"   |
 | Kolom `nama` dan `tanggal_lahir` bertabrakan                   | Excel menolak nama kolom yang sama                                     | "Tetap pertahankan dua kolom bernama nama dan dua kolom bernama tanggal_lahir sesuai urutan yang diminta" |
-| Gemini hanya menulis penjelasan / tidak mengeluarkan file | Tombol Code Execution belum aktif, atau Gemini membaca PDF secara visual | "Nyalakan Code Execution di pengaturan obrolan, lalu jalankan kode Python dan berikan file .xlsx. Jangan ketik ulang isi PDF." |
+| Gemini mengetik ulang isi PDF sebagai data hardcoded di dalam kode (mis. list/dict berisi nama & NIP) | Gemini membaca PDF dengan mata lalu menulis datanya sebagai teks di kode, bukan membuka file di dalam kode | "Jangan hardcode. Buka file PDF di dalam kode Python dengan library pembaca PDF, lalu ekstrak teks/tabelnya saat kode dijalankan. Kode tidak boleh berisi nilai data apa pun dari PDF." |
 
 ---
 
@@ -212,13 +212,19 @@ Setelah menyimpan, mintalah Gemini menampilkan:
 
 **PRASYARAT — wajib dicek sebelum kirim prompt:**
 1. Pastikan tombol **Code Execution** (atau "Advanced" → code execution) dalam obrolan Gemini **aktif / nyala**. Jika mati, Gemini hanya akan menulis penjelasan, bukan menjalankan kode.
-2. Jangan menulis instruksi manual "ketik ulang tabel ini" — itu membuat Gemini sekadar menyalin isi PDF sebagai teks.
+2. Jangan menulis instruksi manual "ketik ulang tabel ini" — itu membuat Gemini sekadar menyalin isi PDF sebagai teks (termasuk menaruhnya sebagai data hardcoded di dalam kode).
 3. Lampirkan file PDF, lalu salin teks di bawah ini.
 
 ```text
-Gunakan CODE EXECUTION (jalankan Python). JANGAN membaca isi PDF dengan mata sendiri dan JANGAN mengetik ulang datanya sebagai teks. Anda WAJIB menulis kode Python, MENJALANKANNYA di sandbox, dan mengembalikan file .xlsx. Jika tidak menjalankan kode, jawaban Anda salah.
+Tugas: konversi file PDF yang saya lampirkan menjadi Excel. Gunakan CODE EXECUTION / jalankan Python.
 
-Berikut file PDF bernama Laporan_SKUMPTK_dummy.pdf. Ekstrak datanya dengan Python dan kirimkan kembali sebagai file Excel bernama Laporan_SKUMPTK.xlsx.
+ATURAN PALING PENTING (jika dilanggar, jawaban SALAH):
+- Anda WAJIB membuka dan membaca file PDF tersebut secara PROGRAMATIK dari dalam kode Python (menggunakan library pembaca PDF, misalnya membuka file lalu mengekstrak teks/tabel per halaman).
+- DILARANG KERAS menulis/mengetik isi data PDF secara langsung ke dalam kode sebagai teks (misalnya memasukkan nama, NIP, tanggal ke dalam variabel atau list literal di dalam kode). Itu berarti Anda "mengetik ulang" PDF dengan mata, bukan memproses filenya.
+- Kode Anda TIDAK BOLEH mengandung nilai data apa pun dari PDF. Semua nilai harus didapat dengan membaca file saat kode dijalankan.
+- Dengan begitu, kode yang sama akan tetap jalan untuk PDF lain dengan format serupa tanpa perlu diketik ulang.
+
+Nama file PDF: Laporan_SKUMPTK_dummy.pdf. Hasil: file Excel bernama Laporan_SKUMPTK.xlsx.
 
 Setiap halaman PDF berisi satu surat keterangan untuk satu pegawai dengan tabel susunan keluarga di bawahnya.
 
@@ -250,7 +256,7 @@ Pastikan semua kolom tanggal dihasilkan sebagai tanggal Excel yang benar, bukan 
 
 Setelah selesai, tampilkan jumlah halaman yang dibaca, total baris Excel, 5 baris pertama, konfirmasi file Laporan_SKUMPTK.xlsx sudah dibuat, dan beri peringatan jika ada masalah.
 
-Jalankan kodenya di sandbox dengan CODE EXECUTION, lalu lampirkan file Laporan_SKUMPTK.xlsx agar bisa saya unduh. Jangan hanya menuliskan langkah-langkah, potongan kode, atau penjelasan — hasil akhirnya HARUS berupa file .xlsx yang bisa diunduh.
+Jalankan kodenya dengan CODE EXECUTION, lalu lampirkan file Laporan_SKUMPTK.xlsx agar bisa saya unduh. Sekali lagi: kode harus MEMBUKA dan MEMBACA file PDF saat dijalankan — jangan mengetik isi PDF ke dalam kode. Jika di kode Anda ada teks data PDF (misal "BAMBANG SUKARNO" atau "19750512...") sebagai literal, berarti Anda salah; perbaiki supaya data dibaca dari file.
 ```
 
 ---
