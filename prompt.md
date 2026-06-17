@@ -1,21 +1,21 @@
-# Prompt: Convert Store.pdf to Excel using Python (Gemini Sandbox)
+# Prompt: Mengubah Store.pdf Menjadi Excel dengan Python (Gemini Sandbox)
 
-> **Purpose:** Ask Gemini to write and run Python code that extracts the table from `Store.pdf` and saves it as `Store.xlsx`.
-> **Audience:** Students / non-programmers. Tweak only the sections marked **(EDITABLE)**.
-> **Important:** This version is intentionally free of Python syntax. The user does not need to understand Python; they only need to describe what they want in plain language.
+> **Tujuan:** Meminta Gemini untuk menulis dan menjalankan kode Python yang mengekstrak tabel dari `Store.pdf` dan menyimpannya sebagai `Store.xlsx`.
+> **Untuk siapa:** Siswa / karyawan yang tidak punya pengalaman pemrograman. Hanya ubah bagian yang ditandai **(BISA DIEDIT)**.
+> **Catatan penting:** Versi ini sengaja tidak berisi kode Python maupun nama pustaka Python. Pengguna cukup menjelaskan apa yang diinginkan dengan bahasa sehari-hari.
 
 ---
 
-## 1. GOAL (What we want)
+## 1. TUJUAN (Apa yang kita inginkan)
 
-Extract the tabular store data from the attached `Store.pdf` and produce a clean Excel file named `Store.xlsx`.
+Ambil data tabel toko dari lampiran `Store.pdf` dan simpan sebagai file Excel bernama `Store.xlsx`.
 
-- **Input file:** `Store.pdf`
-- **Output file:** `Store.xlsx`
-- **Expected content:** one worksheet containing all rows from the PDF table(s).
-- **Important:**
-  - The table is printed across **15 pages**.
-  - Each page repeats the **same 6 columns**:
+- **File masukan:** `Store.pdf`
+- **File keluaran:** `Store.xlsx`
+- **Isi yang diharapkan:** satu lembar kerja yang berisi semua baris data dari tabel PDF.
+- **Hal penting:**
+  - Tabel tersebar di **15 halaman**.
+  - Setiap halaman memiliki **6 kolom yang sama**:
     1. `BusinessEntityID`
     2. `Name`
     3. `SalesPersonID`
@@ -25,7 +25,7 @@ Extract the tabular store data from the attached `Store.pdf` and produce a clean
 
 ---
 
-## 2. DATA OVERVIEW (What the table looks like)
+## 2. GAMBARAN DATA (Tabel seperti apa)
 
 ```
 BusinessEntityID | Name                    | SalesPersonID | Demographics | rowguid | ModifiedDate
@@ -33,103 +33,103 @@ BusinessEntityID | Name                    | SalesPersonID | Demographics | rowg
 294              | Professional Sales and  | 276           | ...          | ...     | ...
 ```
 
-- The first row of each page is the **header**. Do **not** duplicate it in the final Excel file.
-- The `Demographics` column contains long XML text.
-- The `rowguid` is a UUID but may be split across table cells; please merge split cells back into one value per logical row.
+- Baris pertama di setiap halaman adalah **judul kolom (header)**. Jangan sampai muncul berulang kali di file Excel akhir.
+- Kolom `Demographics` berisi teks XML yang panjang.
+- Kolom `rowguid` berupa UUID tetapi bisa terpecah menjadi beberapa sel; harus disatukan kembali menjadi satu nilai per baris.
 
 ---
 
-## 3. INSTRUCTIONS FOR GEMINI (Plain-language steps)
+## 3. INSTRUKSI UNTUK GEMINI (Langkah-langkah dalam bahasa sehari-hari)
 
-### 3.1 Setup
+### 3.1 Persiapan
 
-Gemini will use its sandboxed Python environment. Ask it to install any missing tools it needs, then write and run the script itself.
+Gemini akan menggunakan lingkungan Python di dalam kotak pasirnya. Mintalah Gemini untuk menginstal alat apa pun yang diperlukan, lalu menulis dan menjalankan skripnya sendiri.
 
-### 3.2 Read every page
+### 3.2 Baca setiap halaman
 
-- Read the entire PDF from page 1 to page 15.
-- Identify the table on each page.
+- Baca seluruh PDF dari halaman 1 sampai halaman 15.
+- Temukan tabel di setiap halaman.
 
-### 3.3 Clean the data
+### 3.3 Bersihkan data
 
-- Use the first row of page 1 as the column header.
-- Skip the first row on every later page, so the header appears only once.
-- Combine all other rows into one continuous list.
-- If a piece of information (especially `rowguid` or `Demographics`) is broken into two or more cells on the same row, put it back together into one value.
-- Remove fully blank rows.
+- Gunakan baris pertama di halaman 1 sebagai judul kolom.
+- Lewati baris pertama di setiap halaman berikutnya, sehingga judul kolom hanya muncul sekali.
+- Gabungkan semua baris lainnya menjadi satu daftar berurutan.
+- Jika satu informasi (terutama `rowguid` atau `Demographics`) terpecah menjadi beberapa sel dalam satu baris, satukan kembali menjadi satu nilai.
+- Hapus baris yang benar-benar kosong.
 
-### 3.4 Create the Excel file
+### 3.4 Buat file Excel
 
-- Create an Excel workbook.
-- Put the combined table into the first sheet.
-- Save the file as `Store.xlsx`.
+- Buat workbook Excel.
+- Letakkan tabel gabungan tersebut di lembar pertama.
+- Simpan file dengan nama `Store.xlsx`.
 
-### 3.5 Verify and report
+### 3.5 Verifikasi dan laporkan
 
-After saving, ask Gemini to show:
+Setelah menyimpan, mintalah Gemini menampilkan:
 
-- How many data rows it extracted (excluding the header).
-- The first 5 rows as a preview.
-- Confirmation that `Store.xlsx` was created.
-- Any warnings about missing values or rows that looked messy.
-
----
-
-## 4. EXPECTED OUTPUT FILES
-
-| File          | Description                                          |
-|---------------|------------------------------------------------------|
-| `Store.xlsx`  | Clean Excel workbook with one sheet: all store rows  |
+- Berapa banyak baris data yang berhasil diambil (tidak termasuk judul kolom).
+- Pratinjau 5 baris pertama.
+- Konfirmasi bahwa `Store.xlsx` telah dibuat.
+- Peringatan jika ada nilai yang hilang atau baris yang terlihat kacau.
 
 ---
 
-## 5. TROUBLESHOOTING GUIDE (Edit if new problems appear)
+## 4. FILE KELUARAN YANG DIHARAPKAN
 
-| Symptom                                                | Likely cause                                                      | What to ask Gemini to fix                                            |
-|--------------------------------------------------------|-------------------------------------------------------------------|-----------------------------------------------------------------------|
-| Header appears in the middle of the data               | Page header not being skipped                                     | "Skip the first row on every page after page 1"                       |
-| `rowguid` looks broken into several columns            | PDF wraps one logical cell across cells                           | "Concatenate the rowguid pieces for each row into one column"         |
-| Some rows have the wrong number of columns             | Page contains extra text lines that were mistaken for table rows  | "Only keep rows that have 6 non-empty values"                         |
-| Duplicate rows appear                                  | Same table printed on every page and headers are kept twice       | "Remove duplicate rows, and keep only one header at the top"          |
-| Excel file columns look too narrow                     | Default column widths                                             | "Auto-fit column widths in the Excel file after saving"               |
+| File          | Keterangan                                              |
+|---------------|---------------------------------------------------------|
+| `Store.xlsx`  | File Excel bersih dengan satu lembar: semua baris toko  |
 
 ---
 
-## 6. OPTIONAL ADVANCEMENTS (Only if needed)
+## 5. PANDUAN MENGATASI MASALAH (Edit jika muncul masalah baru)
 
-- **Parse `Demographics` XML** into separate columns such as `AnnualRevenue`, `BankName`, `BusinessType`, `YearOpened`, `Specialty`, `SquareFeet`, `Brands`, `Internet`, `NumberEmployees`.
-- **Format** `ModifiedDate` as a proper date column.
-- **Rename the worksheet** from `Sheet1` to `Stores`.
+| Gejala                                              | Penyebab yang mungkin                                           | Perintah tambahan untuk ditanyakan ke Gemini                          |
+|-----------------------------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------|
+| Judul kolom muncul di tengah data                   | Baris judul di halaman berikutnya tidak dilewati                  | "Lewati baris pertama di setiap halaman setelah halaman 1"             |
+| `rowguid` terlihat pecah menjadi beberapa kolom     | Satu nilai logis terbagi ke beberapa sel                          | "Satukan potongan-potongan rowguid di setiap baris menjadi satu kolom" |
+| Ada baris dengan jumlah kolom yang salah            | Ada baris teks tambahan yang tertangkap sebagai tabel             | "Hanya simpan baris yang memiliki 6 nilai tidak kosong"                |
+| Baris yang sama muncul lebih dari sekali            | Tabel sama muncul di setiap halaman dan judul kolom tersimpan dua kali | "Hapus baris duplikat, dan pertahankan hanya satu judul kolom di paling atas" |
+| Kolom di Excel terlalu sempit                       | Lebar kolom bawaan                                              | "Sesuaikan lebar kolom di Excel setelah menyimpan"                     |
 
 ---
 
-## 7. PROMPT TO PASTE INTO GEMINI (Copy from here to the chat)
+## 6. PENINGKATAN OPSIONAL (Hanya jika diperlukan)
+
+- **Uraikan XML di kolom `Demographics`** menjadi kolom-kolom tersendiri seperti `AnnualRevenue`, `BankName`, `BusinessType`, `YearOpened`, `Specialty`, `SquareFeet`, `Brands`, `Internet`, `NumberEmployees`.
+- **Format** kolom `ModifiedDate` sebagai kolom tanggal yang benar.
+- **Ubah nama lembar kerja** dari `Sheet1` menjadi `Stores`.
+
+---
+
+## 7. PROMPT YANG DIKIRIM KE GEMINI (Salin dari sini ke chat)
 
 ```text
-You have a sandboxed Python environment and a file called Store.pdf attached to this chat.
+Anda memiliki lingkungan Python dalam kotak pasir dan file bernama Store.pdf dilampirkan di chat ini.
 
-The PDF is 15 pages long. Each page contains the same store table with these 6 columns:
+PDF ini terdiri dari 15 halaman. Setiap halaman berisi tabel toko yang sama dengan 6 kolom berikut:
 BusinessEntityID, Name, SalesPersonID, Demographics, rowguid, ModifiedDate.
 
-Please use Python to:
-1. Install any missing tools you need.
-2. Read every page of Store.pdf.
-3. Extract the table from each page.
-4. Use the first row of page 1 as the column header.
-5. Skip the header row on all later pages.
-6. Merge any split cells on each row, especially in rowguid and Demographics, so every row has exactly 6 values matching the header.
-7. Save the combined table as Store.xlsx.
-8. Tell me how many data rows were extracted, show the first 5 rows, confirm that Store.xlsx was created, and warn me about any messy rows.
+Tolong gunakan Python untuk:
+1. Menginstal alat apa pun yang belum tersedia.
+2. Membaca setiap halaman Store.pdf.
+3. Mengambil tabel dari setiap halaman.
+4. Menggunakan baris pertama halaman 1 sebagai judul kolom.
+5. Melewati baris judul di semua halaman berikutnya.
+6. Menyatukan sel yang terpecah di setiap baris, terutama pada kolom rowguid dan Demographics, sehingga setiap baris memiliki tepat 6 nilai yang sesuai dengan judul kolom.
+7. Menyimpan tabel gabungan sebagai Store.xlsx.
+8. Memberitahu berapa baris data yang berhasil diambil, menunjukkan 5 baris pertama, mengonfirmasi bahwa Store.xlsx telah dibuat, dan memberi peringatan jika ada baris yang kacau.
 
-Finally, provide the Store.xlsx file so I can download it.
+Terakhir, berikan file Store.xlsx agar saya bisa mengunduhnya.
 ```
 
 ---
 
-## 8. STUDENT NOTES
+## 8. CATATAN UNTUK SISWA
 
-- **Do not change section 7 unless the output from Gemini is wrong.**
-- If the output is wrong, first check section 5 (Troubleshooting).
-- If a fix is needed, add one extra sentence at the end of the prompt in section 7 explaining the problem, e.g.:
-  - `"The rowguid values are split into two cells; merge them."`
-  - `"Some rows have 7 columns instead of 6; remove the extra empty cell."`
+- **Jangan ubah bagian 7 kecuali hasil dari Gemini salah.**
+- Jika hasilnya salah, periksa dulu bagian 5 (Panduan Mengatasi Masalah).
+- Jika diperlukan perbaikan, tambahkan satu kalimat di akhir prompt pada bagian 7 yang menjelaskan masalahnya, contohnya:
+  - `"Nilai rowguid terpecah menjadi dua sel; satukan kembali."`
+  - `"Beberapa baris memiliki 7 kolom, seharusnya 6; hapus sel kosong yang berlebih."`
